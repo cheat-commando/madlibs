@@ -2,7 +2,7 @@
 
 from random import choice
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for
 
 # "__name__" is a special Python variable for the name of the current module.
 # Flask wants to know this to know what any imported things are relative to.
@@ -40,6 +40,22 @@ def greet_person():
     return render_template("compliment.html",
                            person=player,
                            compliment=compliment)
+
+
+@app.route('/game')
+def show_madlib_form():
+    if request.args.get('yn') == "decline":
+        return render_template('goodbye.html')
+    else:
+        return render_template("game.html")
+
+@app.route('/madlib', methods=['POST'])
+def show_madlib():
+    person = request.form.get('person')
+    adjective = request.form.get('adjective')
+    noun = request.form.get('noun')
+    color = request.form.get('color')
+    return render_template('madlib.html', person=person, adjective=adjective, noun=noun, color=color)
 
 
 if __name__ == '__main__':
